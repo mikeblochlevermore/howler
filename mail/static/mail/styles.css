@@ -1,3 +1,13 @@
 textarea {
     min-height: 400px;
 }
+
+#emails-list div {
+    border: dashed 1px lightblue;
+    padding: 20px;
+    margin-bottom: 4px;
+}
+
+#emails-list div:hover {
+    background-color:  lightblue;
+}

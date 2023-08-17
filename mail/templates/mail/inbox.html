@@ -14,9 +14,16 @@
     <div id="emails-view">
     </div>
 
+    <div id="email">
+        <h2 id="sender"></h2>
+        <h4 id="subject"></h4>
+        <p id="body"></p>
+        <input type="submit" class="btn btn-primary" value="archive" id="archive_button"/>
+    </div>
+
     <div id="compose-view">
         <h3>New Email</h3>
-        <form id="compose-form">
+        <form id="compose-form" onsubmit="send_mail()">
             <div class="form-group">
                 From: <input disabled class="form-control" value="{{ request.user.email }}">
             </div>
