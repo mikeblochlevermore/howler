@@ -16,10 +16,36 @@ function compose_email() {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
+  // Track input fields
+  const recipients = document.querySelector('#compose-recipients');
+  const subject = document.querySelector('#compose-subject');
+  const body = document.querySelector('#compose-body');
+
   // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+  recipients.value = '';
+  subject.value = '';
+  body.value = '';
+
+  // On form submission:
+  document.querySelector('#compose-form').addEventListener('submit', e => {
+    e.preventDefault();
+
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+          recipients: `${recipients.value}`,
+          subject: `${subject.value}`,
+          body: `${body.value}`
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Log result (success / failure to send)
+        console.log(result);
+        // Redirects to the sent mailbox
+        load_mailbox('sent')
+    });
+})
 }
 
 function load_mailbox(mailbox) {
@@ -42,7 +68,7 @@ function load_mailbox(mailbox) {
     // Loop through each email and create HTML elements
     emails.forEach(email => {
       const element = document.createElement("div");
-      element.innerHTML = `ID: ${email.id} BODY: ${email.body}`;
+      element.innerHTML = `ID: ${email.id} BODY: ${email.body} SENDER: ${email.sender}`;
       emailsView.append(element);
       element.addEventListener('click', function() {
         console.log('This element has been clicked!')
