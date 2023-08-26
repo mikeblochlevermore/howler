@@ -126,6 +126,34 @@ function view_email(id) {
     })
     console.log(email)
 
+// Animating the message
+// script.js
+const elements = document.querySelectorAll("#body > *");
+let currentIndex = 0;
+
+// Hide all elements initially
+for (const element of elements) {
+  element.style.display = "none";
+}
+
+function showElement(elementIndex) {
+  if (elementIndex < elements.length) {
+    elements[elementIndex].style.display = "block";
+    const delay = elements[elementIndex].tagName === "H1" ? 1000 : 500; // Adjust delays as needed
+    setTimeout(() => {
+      elements[elementIndex].style.display = "none";
+      currentIndex++;
+      showElement(currentIndex);
+    }, delay);
+  }
+}
+
+showElement(currentIndex);
+
+
+
+
+
     // Listens for clicking on the archive button
     document.querySelector('#archive_button').addEventListener('click', e => {
       e.preventDefault();

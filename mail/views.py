@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+import markdown2
 
 from .models import User, Email
 
@@ -51,6 +52,9 @@ def compose(request):
     # Get contents of email
     subject = data.get("subject", "")
     body = data.get("body", "")
+
+    # NEW: allows markdown format to highlight parts of the mail
+    body = markdown2.markdown(body)
 
     # Create one email for each recipient, plus sender
     users = set()
