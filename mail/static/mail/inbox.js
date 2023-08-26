@@ -14,6 +14,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Track input fields
@@ -140,14 +141,40 @@ function view_email(id) {
     });
   };
 
-  function archive(email) {
-    console.log('archive button clicked');
-    fetch(`/emails/${email.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...email,
-        archived: !email.archived, // Toggle the archived state
-      }),
-    })
-    .then(() => load_mailbox('archive'))
-  }
+
+function archive(email) {
+  console.log('archive button clicked');
+  fetch(`/emails/${email.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...email,
+      archived: !email.archived, // Toggle the archived state
+    }),
+  })
+  .then(() => load_mailbox('archive'))
+}
+
+
+function reply(email) {
+  console.log('reply button clicked');
+
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  // Track input fields
+  const recipients = document.querySelector('#compose-recipients');
+  const subject = document.querySelector('#compose-subject');
+  const body = document.querySelector('#compose-body');
+  body.autofocus = true;
+
+  // Populate the form fields with the email that's being replied to
+  recipients.value = email.sender;
+  subject.value = `Re: ${email.subject}`;
+  body.value = `
+
+  On ${email.timestamp},
+  ${email.sender} wrote:
+  ${email.body}`;
+}
