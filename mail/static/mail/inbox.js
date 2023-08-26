@@ -62,7 +62,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email').style.display = 'none';
 
-  // Show the mailbox name
+  // Show the mailbox name and space for lisitng emails
   document.querySelector('#emails-view').innerHTML =
   `
   <h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>
@@ -72,19 +72,30 @@ function load_mailbox(mailbox) {
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
-    // Print emails
-    console.log(emails);
 
+    // Selects the emails-list div newly created above in the #emails-view div
     const emailsList = document.querySelector('#emails-list');
 
     // Loop through each email and create HTML elements
     emails.forEach(email => {
-        const element = document.createElement("div");
+
+      console.log(email)
+
+        // change the id of the div to #read if the read state is true (changes the styling)
+        if (email.read == true) {
+          var element = document.createElement("div");
+          element.id = "read"
+        }
+        else {
+          var element = document.createElement("div");
+        }
         element.innerHTML = `<strong>${email.sender}</strong> / ${email.subject} // ${email.body}`;
         emailsList.append(element);
+
+        // The div can be clicked on to view the email
         element.addEventListener('click', function() {
           view_email(email.id)
-          })
+        })
     });
   });
 }
@@ -98,16 +109,34 @@ function view_email(id) {
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
-    // Print emails
-    console.log(email);
+
     // Selects by id in inbox.html and sets the innerHTML to display relevant info:
     document.querySelector('#sender').innerHTML = `${email.sender}`;
     document.querySelector('#subject').innerHTML = `${email.subject}`;
     document.querySelector('#body').innerHTML = `${email.body}`;
+
+    // Now the email has been viewed, change the 'read' state to true
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...email,
+        read: true,
+      }),
+    })
+    console.log(email)
+
+    // Listens for clicking on the archive button
     document.querySelector('#archive_button').addEventListener('click', e => {
       e.preventDefault();
       archive(email);
     })
+
+     // Listens for clicking on the reply button
+     document.querySelector('#reply_button').addEventListener('click', e => {
+      e.preventDefault();
+      reply(email);
+    })
+
     });
   };
 

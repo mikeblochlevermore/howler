@@ -11,3 +11,7 @@ textarea {
 #emails-list div:hover {
     background-color:  lightblue;
 }
+
+#read {
+    background-color: lightgrey;
+}
