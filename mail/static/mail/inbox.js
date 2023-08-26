@@ -129,6 +129,10 @@ function view_email(id) {
 // Animating the message
 // script.js
 const elements = document.querySelectorAll("#body > *");
+
+let speech = new SpeechSynthesisUtterance();
+speech.lang = "en";
+
 let currentIndex = 0;
 
 // Hide all elements initially
@@ -139,7 +143,10 @@ for (const element of elements) {
 function showElement(elementIndex) {
   if (elementIndex < elements.length) {
     elements[elementIndex].style.display = "block";
+    const speech = new SpeechSynthesisUtterance(elements[elementIndex].textContent);
+    speechSynthesis.speak(speech);
     const delay = elements[elementIndex].tagName === "H1" ? 1000 : 500; // Adjust delays as needed
+    
     setTimeout(() => {
       elements[elementIndex].style.display = "none";
       currentIndex++;
