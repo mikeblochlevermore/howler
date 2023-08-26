@@ -106,6 +106,7 @@ function view_email(id) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email').style.display = 'block';
+  document.querySelector('#body').style.display = "flex";
 
   fetch(`/emails/${id}`)
   .then(response => response.json())
@@ -116,53 +117,8 @@ function view_email(id) {
     document.querySelector('#subject').innerHTML = `${email.subject}`;
     document.querySelector('#body').innerHTML = `${email.body}`;
 
-    // Now the email has been viewed, change the 'read' state to true
-    fetch(`/emails/${email.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...email,
-        read: true,
-      }),
-    })
-    console.log(email)
-
-// Animating the message
-// script.js
-const elements = document.querySelectorAll("#body > *");
-
-let speech = new SpeechSynthesisUtterance();
-speech.lang = "en";
-
-let currentIndex = 0;
-
-// Hide all elements initially
-for (const element of elements) {
-  element.style.display = "none";
-}
-
-function showElement(elementIndex) {
-  if (elementIndex < elements.length) {
-    elements[elementIndex].style.display = "block";
-    const speech = new SpeechSynthesisUtterance(elements[elementIndex].textContent);
-    speechSynthesis.speak(speech);
-    const delay = elements[elementIndex].tagName === "H1" ? 1000 : 500; // Adjust delays as needed
-    
-    setTimeout(() => {
-      elements[elementIndex].style.display = "none";
-      currentIndex++;
-      showElement(currentIndex);
-    }, delay);
-  }
-}
-
-showElement(currentIndex);
-
-
-
-
-
-    // Listens for clicking on the archive button
-    document.querySelector('#archive_button').addEventListener('click', e => {
+     // Listens for clicking on the archive button
+     document.querySelector('#archive_button').addEventListener('click', e => {
       e.preventDefault();
       archive(email);
     })
@@ -173,8 +129,85 @@ showElement(currentIndex);
       reply(email);
     })
 
-    });
-  };
+    // ANIMATION
+
+    // Selects all the elements in the body
+    const elements = document.querySelectorAll("#body > *");
+
+    // Hide all elements initially
+    for (const element of elements) {
+      element.style.display = "none";
+    }
+
+    // sets an iteration count to loop through each element
+    let i = 0;
+
+    function showElement(i) {
+      if (i < elements.length) {
+
+        // converts the text content of that element to speech
+        const speech = new SpeechSynthesisUtterance(elements[i].textContent);
+
+        // Looks up whether the current element is H1, H2 or P
+        const tag = elements[i].tagName
+
+        // Sets the speech properties depending on the type of element
+        switch (tag) {
+          case 'H1':
+            speech.volume = 1.0
+            speech.pitch = 1.2
+            speech.rate = 0.8
+            break
+          case 'H2':
+            speech.volume = 0.5
+            speech.pitch = 1.7
+            speech.rate = 0.6
+            break
+          case 'H3':
+            speech.volume = 0.3
+            speech.pitch = 1.7
+            speech.rate = 1
+            break
+          default:
+            speech.volume = 0.2
+            speech.pitch = 2
+        }
+
+        // Utters the content of the element and displays it
+        speechSynthesis.speak(speech);
+        elements[i].style.display = "block";
+
+        // When the current element is finished being spoken:
+        // hide it, update the count (i), and start on the next element
+        speech.onend = () => {
+          elements[i].style.display = "none";
+          i++;
+          showElement(i);
+        };
+      }
+      else {
+        // Animation ended: Make all the elements visible together
+        for (const element of elements) {
+          element.style.display = "block";
+        }
+
+        document.querySelector('#body').style.display = "block";
+        // Now the email has been viewed, change the 'read' state to true
+
+        fetch(`/emails/${email.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            ...email,
+            read: true,
+          }),
+        })
+      }
+    }
+  // Starts the process of displaying each element in turn
+  showElement(i);
+
+  });
+};
 
 
 function archive(email) {
