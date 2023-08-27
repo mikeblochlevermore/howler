@@ -90,7 +90,7 @@ function load_mailbox(mailbox) {
         else {
           var element = document.createElement("div");
         }
-        element.innerHTML = `<strong>${email.sender}</strong> / ${email.subject} // ${email.body}`;
+        element.innerHTML = `<strong>${email.sender}</strong> / ${email.subject}`;
         emailsList.append(element);
 
         // The div can be clicked on to view the email
@@ -106,33 +106,47 @@ function view_email(id) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email').style.display = 'block';
-  document.querySelector('#body').style.display = "flex";
 
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
 
-    // Selects by id in inbox.html and sets the innerHTML to display relevant info:
-    document.querySelector('#sender').innerHTML = `${email.sender}`;
-    document.querySelector('#subject').innerHTML = `${email.subject}`;
-    document.querySelector('#body').innerHTML = `${email.body}`;
+    document.querySelector('#email').innerHTML =
+    `
+    <h2 id="sender">${email.sender}</h2>
+    <h4 id="subject">${email.subject}</h4>
 
-     // Listens for clicking on the archive button
-     document.querySelector('#archive_button').addEventListener('click', e => {
-      e.preventDefault();
-      archive(email);
-    })
+    <div id="howl_view">${email.body}</div>
 
-     // Listens for clicking on the reply button
-     document.querySelector('#reply_button').addEventListener('click', e => {
-      e.preventDefault();
-      reply(email);
-    })
+    <div id="read_view">
+      <div>${email.body}<div>
+      <div>
+        <input onclick="toggle_read(${email.id}, ${email.read})" type="submit" class="btn btn-primary" value="unread" id="unread"/>
+        <input onclick="toggle_archive(${email.id}, ${email.archived})" type="submit" class="btn btn-primary" value="archive" id="archive_button"/>
+        <input onclick="reply(${email.id})" type="submit" class="btn btn-primary" value="reply" id="reply_button"/>
+      </div>
+    </div>
+    `;
 
-    // ANIMATION
+    if (email.read == false) {
+      document.querySelector('#howl_view').style.display = 'flex';
+      document.querySelector('#read_view').style.display = 'none';
+      // Speaks and animates the email
+      howl()
+    }
+    else {
+      document.querySelector('#howl_view').style.display = 'none';
+      document.querySelector('#read_view').style.display = 'block';
+    }
+  })
+}
+
+
+// ANIMATION
+function howl () {
 
     // Selects all the elements in the body
-    const elements = document.querySelectorAll("#body > *");
+    const elements = document.querySelectorAll("#howl_view > *");
 
     // Hide all elements initially
     for (const element of elements) {
@@ -186,63 +200,66 @@ function view_email(id) {
         };
       }
       else {
-        // Animation ended: Make all the elements visible together
-        for (const element of elements) {
-          element.style.display = "block";
-        }
-
-        document.querySelector('#body').style.display = "block";
-        // Now the email has been viewed, change the 'read' state to true
-
-        fetch(`/emails/${email.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            ...email,
-            read: true,
-          }),
-        })
+        // Animation ended: hide the howl_view, display the read_view
+        document.querySelector('#read_view').style.display = "block";
+        document.querySelector('#howl_view').style.display = "none";
       }
     }
   // Starts the process of displaying each element in turn
   showElement(i);
-
-  });
-};
-
-
-function archive(email) {
-  console.log('archive button clicked');
-  fetch(`/emails/${email.id}`, {
-    method: 'PUT',
-    body: JSON.stringify({
-      ...email,
-      archived: !email.archived, // Toggle the archived state
-    }),
-  })
-  .then(() => load_mailbox('archive'))
 }
 
 
-function reply(email) {
+function toggle_archive(id, archived_status) {
+    console.log('archive button clicked');
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...email,
+        archived: !archived_status, // Toggle the archived state
+      }),
+    })
+    load_mailbox('archive')
+}
+
+
+function toggle_read(id, read_status) {
+  console.log('toggle_read button clicked');
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...email,
+      read: !read_status, // Toggle the read state
+    }),
+  })
+}
+
+
+function reply(id) {
   console.log('reply button clicked');
 
-  // Show compose view and hide other views
-  document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#email').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'block';
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
 
-  // Track input fields
-  const recipients = document.querySelector('#compose-recipients');
-  const subject = document.querySelector('#compose-subject');
-  const body = document.querySelector('#compose-body');
-  body.autofocus = true;
+    // Show compose view and hide other views
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#email').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
 
-  // Populate the form fields with the email that's being replied to
-  recipients.value = email.sender;
-  subject.value = `Re: ${email.subject}`;
-  body.value = `
+    // Track input fields
+    const recipients = document.querySelector('#compose-recipients');
+    const subject = document.querySelector('#compose-subject');
+    const body = document.querySelector('#compose-body');
+    body.autofocus = true;
 
-  On ${email.timestamp},
-  ${email.sender} wrote:
-  ${email.body}`;
+    // Populate the form fields with the email that's being replied to
+    recipients.value = email.sender;
+    subject.value = `Re: ${email.subject}`;
+    body.value = `
+
+    On ${email.timestamp},
+    ${email.sender} wrote:
+    ${email.body}`;
+  })
 }

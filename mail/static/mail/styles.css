@@ -16,13 +16,18 @@ textarea {
     background-color: lightgrey;
 }
 
-#body {
+#howl_view {
     height: 600px;
     width: 100%;
     align-items: center;
     background-color: pink;
     display: flex;
     justify-content: center;
+}
+
+#read_view {
+    background-color: antiquewhite;
+    display: block;
 }
 
 h1 {
