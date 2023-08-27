@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
 function compose_email() {
 
   // Show compose view and hide other views
@@ -56,6 +57,7 @@ function send_mail() {
   });
 }
 
+
 function load_mailbox(mailbox) {
 
   // Show the mailbox and hide other views
@@ -80,8 +82,6 @@ function load_mailbox(mailbox) {
     // Loop through each email and create HTML elements
     emails.forEach(email => {
 
-      console.log(email)
-
         // change the id of the div to #read if the read state is true (changes the styling)
         if (email.read == true) {
           var element = document.createElement("div");
@@ -100,6 +100,7 @@ function load_mailbox(mailbox) {
     });
   });
 }
+
 
 function view_email(id) {
   // Hide other displays, switch to individual email view
@@ -133,6 +134,7 @@ function view_email(id) {
       document.querySelector('#read_view').style.display = 'none';
       // Speaks and animates the email
       howl()
+      .then(toggle_read(email.id, email.read))
     }
     else {
       document.querySelector('#howl_view').style.display = 'none';
