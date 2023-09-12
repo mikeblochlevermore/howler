@@ -1,7 +1,8 @@
 {% extends "mail/layout.html" %}
 
 {% block body %}
-
+<div class="login">
+    <h1 class="title">Howler.com</h1>
     <h2>Register</h2>
 
     {% if message %}
@@ -19,9 +20,10 @@
         <div class="form-group">
             <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
         </div>
-        <input class="btn btn-primary" type="submit" value="Register">
+        <button class="alt_button" type="submit" value="Register">Register</button>
     </form>
 
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+</div>
 
 {% endblock %}
