@@ -1,43 +1,168 @@
+* {
+    padding: 0px;
+}
+
+body {
+    height: 100%;
+}
+
+.title {
+    font-family: 'Bungee', cursive;
+    font-size: 150px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.login {
+    margin-top: 30px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    font-family: 'Bungee', cursive;
+}
+
+nav a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    width: 140px;
+    background-color: white;
+    color: black;
+    border: 1px solid pink;
+    border-radius: 6px;
+    height: 40px;
+    outline: none;
+}
+
+button:focus {
+    outline-color: pink;
+}
+
+button:hover {
+    background-color: pink;
+}
+
+.alt_button {
+    font-family: 'Bungee', cursive;
+    width: 140px;
+    background-color: pink;
+    color: black;
+    border: 1px solid pink;
+    border-radius: 6px;
+    height: 40px;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.alt_button:focus {
+    outline-color: pink;
+}
+
+.alt_button:hover {
+    background-color: white;
+    color: black;
+    height: 40px;
+}
+
 textarea {
     min-height: 400px;
+    margin-bottom: 12px;
 }
 
-#emails-list div {
-    border: dashed 1px lightblue;
-    padding: 20px;
+.listed-email {
+    border: dashed 1px pink;
     margin-bottom: 4px;
+    padding: 8px;
+    padding-left: 30px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 
-#emails-list div:hover {
-    background-color:  lightblue;
+.listed-email strong {
+    padding-right: 40px;
+}
+
+.listed-email:hover {
+    background-color:  pink;
 }
 
 #read {
     background-color: lightgrey;
 }
 
+#unread {
+    background-color: white;
+}
+
 #howl_view {
-    height: 600px;
+    height: 100%;
     width: 100%;
+    font-size: 100%;
+    top: 0;
+    left: 0;
     align-items: center;
     background-color: pink;
     display: flex;
     justify-content: center;
+    position: absolute;
+    text-align: center;
+    font-family: 'Libre Baskerville', serif;
 }
 
 #read_view {
-    background-color: antiquewhite;
+    border: 3px solid pink;
     display: block;
+    padding: 30px;
+    font-family: 'Libre Baskerville', serif;
 }
 
-h1 {
-    font-size: 70px;
+#email_details {
+    padding: 4px;
 }
 
-h2 {
-    font-size: 40px;
+#read-body {
+    margin-bottom: 50px;
+    padding: 4px;
 }
 
-h3 {
-    font-size: 25px;
+#howl_view h1 {
+    font-size: 350px;
+    font-weight: bold;
+}
+
+#howl_view h2 {
+    font-size: 100px;
+}
+
+#howl_view h3 {
+    font-size: 65px;
+}
+
+#howl_view p {
+    font-size: 30px;
+}
+
+#compose_wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 50px;
+}
+
+#instructions {
+    margin-top: 25px;
+    background-color: pink;
+    padding: 18px;
+    border-radius: 10px;
 }

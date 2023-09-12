@@ -2,45 +2,62 @@
 {% load static %}
 
 {% block body %}
-    <h2>{{ request.user.email }}</h2>
-
-    <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
-    <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
-    <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
-    <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+    <nav>
+        <div>
+            <button id="inbox">Inbox</button>
+            <button id="compose">Compose</button>
+            <button id="sent">Sent</button>
+            <button id="archived">Archived</button>
+            <a href="{% url 'logout' %}"><button>Log Out</button></a>
+        </div>
+        <div>
+            <strong>{{ request.user.email }}</strong>
+        </div>
+    </nav>
     <hr>
 
+    <!-- mailbox view -->
     <div id="emails-view">
     </div>
 
+    <!-- individual email view -->
     <div id="email">
-        <!-- <h2 id="archived_status"></h2>
-        <h2 id="read_status"></h2>
-        <h2 id="sender"></h2>
-        <h4 id="subject"></h4>
-        <div id="howl_view"></div>
-        <div id="read_view"></div>
-        <input type="submit" class="btn btn-primary" value="unread" id="unread"/>
-        <input type="submit" class="btn btn-primary" value="archive" id="archive_button"/>
-        <input type="submit" class="btn btn-primary" value="reply" id="reply_button"/> -->
     </div>
 
+    <!-- compose email view -->
     <div id="compose-view">
-        <h3>New Email</h3>
-        <form id="compose-form" onsubmit="send_mail()">
-            <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
+        <h3>Send a Howl</h3>
+        <div id="compose_wrapper">
+            <div>
+                <form id="compose-form" onsubmit="send_mail()">
+                    <div class="form-group">
+                        From: <input disabled class="form-control" value="{{ request.user.email }}">
+                    </div>
+                    <div class="form-group">
+                        To: <input id="compose-recipients" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" id="compose-subject" placeholder="Subject">
+                    </div>
+                    <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
+                    <button type="submit" class="alt_button">HOWL!</button>
+                </form>
             </div>
-            <div class="form-group">
-                To: <input id="compose-recipients" class="form-control">
+            <div id="instructions">
+                <h5>Howl the important parts of your email with hashtags:</h5>
+                <br>
+
+                <h3>#LOUD</h3>
+                <p>Best used one word at a time!</p>
+                <h3>##Snaaarrky</h3>
+                <p>For really hammering in the point, slooowly</p>
+                <h3>###Trite</h3>
+                <p>Just the facts, period.</p>
+                <br>
+                <p><strong>Start a new line</strong> after your hashtagged word or sentence</p>
+                <p><strong>No space</strong> between the #and the first word</p>
             </div>
-            <div class="form-group">
-                <input class="form-control" id="compose-subject" placeholder="Subject">
-            </div>
-            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input type="submit" class="btn btn-primary"/>
-        </form>
+        </div>
     </div>
 
 {% endblock %}

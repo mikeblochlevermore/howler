@@ -89,8 +89,14 @@ function load_mailbox(mailbox) {
         }
         else {
           var element = document.createElement("div");
+          element.id = "unread"
         }
-        element.innerHTML = `<strong>${email.sender}</strong> / ${email.subject}`;
+        element.innerHTML =
+          `<div class="listed-email">
+              <div><strong>${email.sender}</strong>
+              ${email.subject}</div>
+              <div>${email.timestamp}</div>
+          </div>`;
         emailsList.append(element);
 
         // The div can be clicked on to view the email
@@ -114,17 +120,23 @@ function view_email(id) {
 
     document.querySelector('#email').innerHTML =
     `
-    <h2 id="sender">${email.sender}</h2>
-    <h4 id="subject">${email.subject}</h4>
+    <div id="email_details">
+      <h6> <strong>From: ${email.sender}</stong></h6>
+      <h6>Subject: ${email.subject}</h6>
+      <h6>${email.timestamp}</h6>
+    </div>
 
-    <div id="howl_view">${email.body}</div>
+    <div id="howl_view">
+    <div>From ${email.sender}</div>
+    ${email.body}
+    </div>
 
     <div id="read_view">
-      <div>${email.body}<div>
+      <div id="read-body">${email.body}</div>
       <div>
-        <input onclick="toggle_read(${email.id}, ${email.read})" type="submit" class="btn btn-primary" value="unread" id="unread"/>
-        <input onclick="toggle_archive(${email.id}, ${email.archived})" type="submit" class="btn btn-primary" value="archive" id="archive_button"/>
-        <input onclick="reply(${email.id})" type="submit" class="btn btn-primary" value="reply" id="reply_button"/>
+        <button onclick="toggle_read(${email.id}, ${email.read}), load_mailbox('inbox')" type="submit" class="alt_button"/>mark unread</button>
+        <button onclick="toggle_archive(${email.id}, ${email.archived})" type="submit" class="alt_button"/>archive</button>
+        <button onclick="reply(${email.id})" type="submit" class="alt_button"/>reply</button>
       </div>
     </div>
     `;
@@ -132,9 +144,9 @@ function view_email(id) {
     if (email.read == false) {
       document.querySelector('#howl_view').style.display = 'flex';
       document.querySelector('#read_view').style.display = 'none';
-      // Speaks and animates the email
-      howl()
-      .then(toggle_read(email.id, email.read))
+
+      toggle_read(email.id, email.read) // Marks the mail as read
+      howl() // Speaks and animates the email
     }
     else {
       document.querySelector('#howl_view').style.display = 'none';
@@ -144,7 +156,7 @@ function view_email(id) {
 }
 
 
-// ANIMATION
+// ANIMATION AND SPEECH
 function howl () {
 
     // Selects all the elements in the body
@@ -167,7 +179,7 @@ function howl () {
         // Looks up whether the current element is H1, H2 or P
         const tag = elements[i].tagName
 
-        // Sets the speech properties depending on the type of element
+        // Sets the speech properties depending on the type of element (note H1 etc is capitalised by Markdown)
         switch (tag) {
           case 'H1':
             speech.volume = 1.0
@@ -187,6 +199,7 @@ function howl () {
           default:
             speech.volume = 0.2
             speech.pitch = 2
+            speech.rate = 1.1
         }
 
         // Utters the content of the element and displays it
