@@ -31,6 +31,7 @@ function compose_email() {
 
 
 function send_mail() {
+
 // Trigged using the onsubmit attribute of the form on inbox.html
 // This avoided multiple calls, instead of the addEventListener method
 
@@ -192,9 +193,9 @@ function howl () {
             speech.rate = 0.6
             break
           case 'H3':
-            speech.volume = 0.3
-            speech.pitch = 1.7
-            speech.rate = 1
+            speech.volume = 0.4
+            speech.pitch = 1.6
+            speech.rate = 1.2
             break
           default:
             speech.volume = 0.2
