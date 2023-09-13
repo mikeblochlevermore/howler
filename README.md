@@ -2,7 +2,7 @@
 
 ## An emailing system that gets mails read, by yelling them at the recipients
 
-[See the Video](https://youtu.be/BiOrfYFu6-w)<br>
+[See the Video](https://youtu.be/seKbkqJvGgA)<br>
 
 💌 Inspired by 'Howlers' from Harry Potter
 
