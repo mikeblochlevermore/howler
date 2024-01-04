@@ -1,6 +1,11 @@
 # CS50W Project 3: Mail (Howler)
+### An emailing system that gets mails read, by yelling them at the recipients
 
-## An emailing system that gets mails read, by yelling them at the recipients
+<img src="https://github.com/mikeblochlevermore/howler/blob/master/mail/static/mail/howler_cover.png?raw=true" max-width="400"/>
+
+## Watch on YouTube
+
+[![See the Video](https://github.com/mikeblochlevermore/howler/blob/master/mail/static/mail/youtube_thumb.png?raw=true)](https://youtu.be/seKbkqJvGgA)
 
 [See the Video](https://youtu.be/seKbkqJvGgA)<br>
 
@@ -13,6 +18,8 @@
 📬 Complete emailing system with inbox, sent, archive and composing capabilities.
 
 ## Single Page Application
+
+![Inboxes Example](https://github.com/mikeblochlevermore/howler/blob/master/mail/static/mail/inboxes_example.gif?raw=true)
 
 Uses JavaScript to show and hide sections of the page depending on the requests.
 
@@ -48,6 +55,8 @@ fetch('/emails', {
 
 ## Using Markdown to highlight important parts of the mail
 
+![Compose Example](https://github.com/mikeblochlevermore/howler/blob/master/mail/static/mail/compose_example.gif?raw=true)
+
 Taking inspiration from the Wiki project, I used the python library Markdown2 to compose and store an email in Markdown format. Hashtags are used to designate parts of the email that need extra emphasis:
 
 #LOUD <br>
@@ -72,6 +81,8 @@ This was implemented fairly simply by inserting these lines into the compose ema
 ```
 
 ## Spoken and Animated Emails
+
+![Howl Example](https://github.com/mikeblochlevermore/howler/blob/master/mail/static/mail/howl_example.gif?raw=true)
 
 I can't be the only one that gets irritated by people not reading their emails! So when I thought about mails that can't be ignored, the howler from Harry Potter came to mind...
 
@@ -195,7 +206,19 @@ Clicking reply will pre-fill the compose form with the previous email, as well a
 
 - I'd like to implement an option to select which voice the email is to be presented in. There are several in the SpeechSynthesisUtterance plugin, or personally, I think an AI version of Molly Weasley would be hilarious.
 
-### Please note the backend was provided by CS50 for this project, the assignment was to build the front end. As such, the majority of inbox.js, styles.css and inbox.html is my work.
+Please note the backend was provided by CS50 for this project, the assignment was to build the front end. As such, the majority of inbox.js, styles.css and inbox.html is my work as well as the concept of yelling emails (with some thanks to JK Rowling...)
 
+### How to run
 
+Set up database
+- python3 manage.py makemigrations
+- python3 manage.py migrate
 
+Run server
+- python3 manage.py runserver
+
+### Get in Touch!
+
+Michael Bloch-Levermore <br>
+📧 interactivephilosophy@gmail.com <br>
+👤 [LinkedIn](https://www.linkedin.com/in/mike-bloch-levermore/)
